@@ -12,11 +12,12 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry'
   gem 'simplecov', require: false, group: :test
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
 end
 
 group :test do
-  gem 'rspec-rails'
-  gem 'factory_bot_rails'
+
   gem 'shoulda-matchers'
 end
 
