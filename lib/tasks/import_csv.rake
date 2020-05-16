@@ -1,16 +1,19 @@
 require 'csv'
 
 desc 'Import development data from provided csv files.'
-task :seed_csv => :environment do
+task :import_csv_files => :environment do
   destroy_all_records
   seed_all_csv_files
-  # convert_price_to_dollar(Item)
+  convert_price_to_dollar_for(Item)
+  convert_price_to_dollar_for(InvoiceItem)
   reset_primary_sequences
 end
 
 def destroy_all_records
+  puts "I have been ordered to destroy all records!"
   models_and_files.each do |model, _|
     model.destroy_all
+    puts "#{model} destroyed!"
   end
 end
 
@@ -42,6 +45,15 @@ end
 
 def file_path_for(file)
   File.join(Rails.root, 'data', file)
+end
+
+def convert_price_to_dollar_for(model)
+  puts "Updating unit_price for #{model}"
+  model.all.each do |record|
+    cents = record.unit_price
+    record.update(unit_price: ('%.2f' % (cents.to_i/100.0)))
+    print '.'
+  end
 end
 
 def reset_primary_sequences
