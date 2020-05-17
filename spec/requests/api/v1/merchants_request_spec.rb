@@ -47,10 +47,21 @@ RSpec.describe 'Merchants API', type: :request do
   end
 
   it "can update an existing merchant" do
+    merchant = create(:merchant)
+    previous_name = merchant.name
+    merchant_params = { name: 'Ryan Camp Ya!' }
 
+    put "/api/v1/merchants/#{merchant.id}", params: { merchant: merchant_params }
+
+    expect(response).to be_successful
+
+    updated_merchant = Merchant.find(merchant.id)
+
+    expect(updated_merchant.name).to_not eql(previous_name)
+    expect(updated_merchant.name).to eql('Ryan Camp Ya!')
   end
 
   it "can destroy a merchant" do
-
+    
   end
 end
