@@ -1,7 +1,7 @@
 require 'csv'
 
 desc 'Import development data from provided csv files.'
-task :import_csv_files => :environment do
+task :import_files => :environment do
   destroy_all_records
   seed_all_csv_files
   convert_price_to_dollar_for(Item)
