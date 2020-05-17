@@ -8,10 +8,14 @@ RSpec.describe 'Merchants API', type: :request do
 
     expect(response).to be_successful
 
-    data = JSON.parse(response.body)
+    json = JSON.parse(response.body)
 
-    expect(data.count).to eql(3)
-    expect(data.first).to have_key('name')
+    expect(json).to have_key('data')
+    expect(json['data'].count).to eql(3)
+    expect(json['data'].first).to have_key('id')
+    expect(json['data'].first).to have_key('type')
+    expect(json['data'].first).to have_key('attributes')
+    expect(json['data'].first['attributes']).to have_key('name')
   end
   it "can send one merchant by id" do
 
