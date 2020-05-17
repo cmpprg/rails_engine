@@ -23,6 +23,17 @@ RSpec.describe 'Items API', type: :request do
   end
 
   it "can send one item from id" do
-    
+    item_id = create(:item).id.to_s
+
+    get "/api/v1/items/#{item_id}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']).to be_instance_of(Hash)
+    expect(json['data']['id']).to eql(item_id)
   end
+
+  
 end
