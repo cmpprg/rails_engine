@@ -15,6 +15,16 @@ class Api::V1::ItemsController < ApplicationController
     render json: serialize_item(new_item)
   end
 
+  def update
+    edited_item = Item.update(params[:id], item_params)
+    render json: serialize_item(edited_item)
+  end
+
+  def destroy
+    deleted_item = Item.destroy(params[:id])
+    render json: serialize_item(deleted_item)
+  end
+
   private
 
   def item_params
