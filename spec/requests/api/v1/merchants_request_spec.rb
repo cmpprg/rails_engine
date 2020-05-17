@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe 'Merchants API', type: :request do
+  before(:each) do
+    Merchant.destroy_all
+  end
+
   it "sends a list of merchants" do
     create_list(:merchant, 3)
 
@@ -9,7 +13,7 @@ RSpec.describe 'Merchants API', type: :request do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-
+    
     expect(json).to have_key('data')
     expect(json['data']).to be_instance_of(Array)
     expect(json['data'].count).to eql(3)
