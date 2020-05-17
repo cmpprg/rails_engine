@@ -36,7 +36,7 @@ RSpec.describe 'Merchants API', type: :request do
   it "can create a new merchant" do
     merchant_params = { name: "Ryan Camp" }
 
-    post "/api/v1/merchants", params: { merchant: merchant_params }
+    post "/api/v1/merchants", params: merchant_params
 
     expect(response).to be_successful
 
@@ -51,7 +51,7 @@ RSpec.describe 'Merchants API', type: :request do
     previous_name = merchant.name
     merchant_params = { name: 'Ryan Camp Ya!' }
 
-    put "/api/v1/merchants/#{merchant.id}", params: { merchant: merchant_params }
+    put "/api/v1/merchants/#{merchant.id}", params: merchant_params
 
     expect(response).to be_successful
 
