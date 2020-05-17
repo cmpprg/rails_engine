@@ -28,7 +28,7 @@ class Api::V1::ItemsController < ApplicationController
   private
 
   def item_params
-    params.permit(:name, :description, :unit_price)
+    params.permit(:name, :description, :unit_price, :merchant_id)
   end
 
   def serialize_item(records)
