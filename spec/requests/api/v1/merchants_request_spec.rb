@@ -34,7 +34,16 @@ RSpec.describe 'Merchants API', type: :request do
   end
 
   it "can create a new merchant" do
-    
+    merchant_params = { name: "Ryan Camp" }
+
+    post "/api/v1/merchants", params: { merchant: merchant_params }
+
+    expect(response).to be_successful
+
+    merchant = Merchant.last
+
+    expect(Merchant.all.count).to eql(1)
+    expect(merchant.name).to eql("Ryan Camp")
   end
 
   it "can update an existing merchant" do
