@@ -1,12 +1,12 @@
 class Api::V1::MerchantsController < ApplicationController
   def index
-    records = Merchant.all
-    render json: serialize_merchant(records)
+    merchants = Merchant.all
+    render json: serialize_merchant(merchants)
   end
 
   def show
-    record = Merchant.find(params[:id])
-    render json: serialize_merchant(record)
+    merchant = Merchant.find(params[:id])
+    render json: serialize_merchant(merchant)
   end
 
   def create
@@ -15,8 +15,13 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def update
-    updated_merchant = Merchant.update(params[:id], merchant_params)
-    render json: serialize_merchant(updated_merchant)
+    edited_merchant = Merchant.update(params[:id], merchant_params)
+    render json: serialize_merchant(edited_merchant)
+  end
+
+  def destroy
+    deleted_merchant = Merchant.destroy(params[:id])
+    render json: serialize_merchant(deleted_merchant)
   end
 
   private

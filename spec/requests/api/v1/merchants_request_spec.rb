@@ -42,7 +42,7 @@ RSpec.describe 'Merchants API', type: :request do
 
     merchant = Merchant.last
 
-    expect(Merchant.all.count).to eql(1)
+    expect(Merchant.count).to eql(1)
     expect(merchant.name).to eql("Ryan Camp")
   end
 
@@ -62,6 +62,12 @@ RSpec.describe 'Merchants API', type: :request do
   end
 
   it "can destroy a merchant" do
-    
+    merchant = create(:merchant)
+
+    delete "/api/v1/merchants/#{merchant.id}"
+
+    expect(response).to be_successful
+    expect(Merchant.exists?(merchant.id)).to eql(false)
+    expect(Merchant.count).to eql(0)
   end
 end
