@@ -30,17 +30,32 @@ RSpec.describe 'Merchant Find API', type: :request do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-    
+
     expect(json['data']['id']).to eql(merchant.id.to_s)
     expect(json['data']['attributes']['name']).to eql(merchant.name)
   end
 
-  it "can find merchant from created_at date" do
+  it "can find merchant from created_at datetime" do
     create_list(:merchant, 2, name: 'not_this_one', created_at: '2012-03-27 14:53:59 UTC')
     merchant = create(:merchant, name: 'RiGhT_one', created_at: '2012-03-28 14:54:09 UTC')
     create_list(:merchant, 2, name: 'not_this_one', created_at: '2012-03-29 14:54:09 UTC')
 
     get "/api/v1/merchants/find?created_at=#{merchant.created_at}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']['id']).to eql(merchant.id.to_s)
+    expect(json['data']['attributes']['name']).to eql(merchant.name)
+  end
+
+  it "can find merchant from updated_at datetime" do
+    create_list(:merchant, 2, name: 'not_this_one', updated_at: '2012-03-27 14:53:59 UTC')
+    merchant = create(:merchant, name: 'RiGhT_one', updated_at: '2012-03-28 14:54:09 UTC')
+    create_list(:merchant, 2, name: 'not_this_one', updated_at: '2012-03-29 14:54:09 UTC')
+
+    get "/api/v1/merchants/find?updated_at=#{merchant.updated_at}"
 
     expect(response).to be_successful
 
