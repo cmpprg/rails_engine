@@ -35,7 +35,7 @@ RSpec.describe 'Merchant Find API', type: :request do
     expect(json['data']['attributes']['name']).to eql(merchant.name)
   end
 
-  it "can find merchant from created_at datetime" do
+  it "can find merchant from created_at date" do
     create_list(:merchant, 2, name: 'not_this_one', created_at: '2012-03-27 14:53:59 UTC')
     merchant = create(:merchant, name: 'RiGhT_one', created_at: '2012-03-28 14:54:09 UTC')
     create_list(:merchant, 2, name: 'not_this_one', created_at: '2012-03-29 14:54:09 UTC')
@@ -50,7 +50,7 @@ RSpec.describe 'Merchant Find API', type: :request do
     expect(json['data']['attributes']['name']).to eql(merchant.name)
   end
 
-  it "can find merchant from updated_at datetime" do
+  it "can find merchant from updated_at date" do
     create_list(:merchant, 2, name: 'not_this_one', updated_at: '2012-03-27 14:53:59 UTC')
     merchant = create(:merchant, name: 'RiGhT_one', updated_at: '2012-03-28 14:54:09 UTC')
     create_list(:merchant, 2, name: 'not_this_one', updated_at: '2012-03-29 14:54:09 UTC')
@@ -65,21 +65,21 @@ RSpec.describe 'Merchant Find API', type: :request do
     expect(json['data']['attributes']['name']).to eql(merchant.name)
   end
 
-  # it "can find merchant from multiple attributes" do
-  #   merchant1 = create(:merchant, name: 'ryan')
-  #   sleep(1.second)
-  #   merchant2 = create(:merchant, name: 'ryan')
-  #
-  #   get "/api/v1/merchants/find?name=ryan&created_at=#{merchant1.created_at}"
-  #
-  #   expect(response).to be_successful
-  #
-  #   json = JSON.parse(response.body)
-  #
-  #   expect(json['data']).to be_instance_of(Hash)
-  #   expect(json['data']['id']).to eql(merchant1.id.to_s)
-  #   expect(json['data']['id']).to_not eql(merchant2.id.to_s)
-  # end
+  it "can find one merchant from multiple attributes" do
+    merchant1 = create(:merchant, name: 'ryan', created_at: '2012-03-28 14:54:09 UTC')
+    sleep(1.second)
+    merchant2 = create(:merchant, name: 'ryan', created_at: '2012-03-26 14:54:09 UTC')
+
+    get "/api/v1/merchants/find?name=ryan&created_at=#{merchant1.created_at}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data']).to be_instance_of(Hash)
+    expect(json['data']['id']).to eql(merchant1.id.to_s)
+    expect(json['data']['id']).to_not eql(merchant2.id.to_s)
+  end
 
   it "can find all records with a particular attribute." do
 
