@@ -1,8 +1,9 @@
 class Api::V1::Merchants::SearchController < ApplicationController
   def show
-    merchant = Merchant.where("LOWER(name) LIKE ?", "%#{params[:name].downcase}%").first if params[:name].present?
-    require 'pry'; binding.pry
-    render json: serialize_merchant(merchant)
+    @merchant = Merchant.all
+    @merchant = @merchant.where("LOWER(name) LIKE ?", "%#{params[:name].downcase}%") if params[:name].present?
+    @merchant = @merchant.where(created_at: DateTime.parse(params[:created_at])) if params[:created_at].present?
+    render json: serialize_merchant(@merchant.first)
   end
 
   private
