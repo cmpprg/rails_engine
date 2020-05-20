@@ -81,7 +81,78 @@ RSpec.describe 'Merchant Find API', type: :request do
     expect(json['data']['id']).to_not eql(merchant2.id.to_s)
   end
 
-  it "can find all records with a particular attribute." do
+  it "can find all records with a particular name case insensitive and partial." do
+    create_list(:merchant, 2, name: 'Ryan')
+    create_list(:merchant, 3, name: 'Robert')
+    create(:merchant, name: 'RoBertina')
+    create_list(:merchant, 2, name: 'Richard')
 
+    get '/api/v1/merchants/find_all?name=roBer'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].length).to eql(4)
+    expect(json['data'][0]['attributes']['name']).to eql('Robert')
+    expect(json['data'][1]['attributes']['name']).to eql('Robert')
+    expect(json['data'][2]['attributes']['name']).to eql('Robert')
+    expect(json['data'][3]['attributes']['name']).to eql('RoBertina')
+  end
+
+  it "can find all records with a particular created at date" do
+    create_list(:merchant, 2, created_at: '2012-03-27 14:53:59 UTC')
+    create_list(:merchant, 3, created_at: '2012-03-28 14:53:59 UTC', name: 'the_ones')
+    create_list(:merchant, 2, created_at: '2012-03-27 14:53:59 UTC')
+    merchant = create(:merchant, created_at: '2012-03-28 14:53:59 UTC', name: 'the_ones')
+
+    get "/api/v1/merchants/find_all?created_at=#{merchant.created_at}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].length).to eql(4)
+    expect(json['data'][0]['attributes']['name']).to eql('the_ones')
+    expect(json['data'][1]['attributes']['name']).to eql('the_ones')
+    expect(json['data'][2]['attributes']['name']).to eql('the_ones')
+    expect(json['data'][3]['attributes']['name']).to eql('the_ones')
+  end
+
+  it "can find all records with a particular updated at date" do
+    create_list(:merchant, 2, updated_at: '2012-03-27 14:53:59 UTC')
+    create_list(:merchant, 3, updated_at: '2012-03-28 14:53:59 UTC', name: 'the_ones')
+    create_list(:merchant, 2, updated_at: '2012-03-27 14:53:59 UTC')
+    merchant = create(:merchant, updated_at: '2012-03-28 14:53:59 UTC', name: 'the_ones')
+
+    get "/api/v1/merchants/find_all?updated_at=#{merchant.updated_at}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].length).to eql(4)
+    expect(json['data'][0]['attributes']['name']).to eql('the_ones')
+    expect(json['data'][1]['attributes']['name']).to eql('the_ones')
+    expect(json['data'][2]['attributes']['name']).to eql('the_ones')
+    expect(json['data'][3]['attributes']['name']).to eql('the_ones')
+  end
+
+  it "can find all records with from multiple attributes" do
+    create_list(:merchant, 2, updated_at: '2012-03-27 14:53:59 UTC')
+    create_list(:merchant, 3, updated_at: '2012-03-28 14:53:59 UTC', name: 'these_ones')
+    create_list(:merchant, 2, updated_at: '2012-03-27 14:53:59 UTC')
+    merchant = create(:merchant, updated_at: '2012-03-28 14:53:59 UTC', name: 'this_one')
+
+    get "/api/v1/merchants/find_all?updated_at=#{merchant.updated_at}&name=e_ones"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].length).to eql(3)
+    expect(json['data'][0]['attributes']['name']).to eql('these_ones')
+    expect(json['data'][1]['attributes']['name']).to eql('these_ones')
+    expect(json['data'][2]['attributes']['name']).to eql('these_ones')
   end
 end
