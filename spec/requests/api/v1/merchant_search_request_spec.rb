@@ -81,7 +81,22 @@ RSpec.describe 'Merchant Find API', type: :request do
     expect(json['data']['id']).to_not eql(merchant2.id.to_s)
   end
 
-  it "can find all records with a particular attribute." do
+  it "can find all records with a particular name case insensitive and partial." do
+    create_list(:merchant, 2, name: 'Ryan')
+    create_list(:merchant, 3, name: 'Robert')
+    create(:merchant, name: 'RoBertina')
+    create_list(:merchant, 2, name: 'Richard')
 
+    get '/api/v1/merchants/find_all?name=roBer'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].length).to eql(3)
+    expect(json['data'][0]['attributes']['name']).to eql('Robert')
+    expect(json['data'][1]['attributes']['name']).to eql('Robert')
+    expect(json['data'][2]['attributes']['name']).to eql('Robert')
+    expect(json['data'][2]['attributes']['name']).to eql('RoBertina')
   end
 end
