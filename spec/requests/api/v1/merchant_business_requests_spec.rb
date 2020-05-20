@@ -92,4 +92,27 @@ RSpec.describe 'Merchant Business API', type: :request do
     expect(json['data'][1]['attributes']['name']).to eql('Rodney')
     expect(json['data'][2]['attributes']['name']).to eql('Kalhune')
   end
+
+  it "can return merchants with most items sold" do
+    get '/api/v1/merchants/most_items?quantity=2'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].length).to eql(2)
+    expect(json['data'][0]['attributes']['name']).to eql('Cisco')
+    expect(json['data'][1]['attributes']['name']).to eql('Lisa')
+
+    get '/api/v1/merchants/most_items?quantity=3'
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+
+    expect(json['data'].length).to eql(3)
+    expect(json['data'][0]['attributes']['name']).to eql('Cisco')
+    expect(json['data'][1]['attributes']['name']).to eql('Lisa')
+    expect(json['data'][2]['attributes']['name']).to eql('Kalhune')
+  end
 end
