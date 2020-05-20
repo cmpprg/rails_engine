@@ -78,8 +78,8 @@ RSpec.describe 'Merchant Business API', type: :request do
     json = JSON.parse(response.body)
 
     expect(json['data'].length).to eql(2)
-    expect(json['data'][0]['attributes']['name']).to eql('Rodney')
-    expect(json['data'][1]['attributes']['name']).to eql('Kalhune')
+    expect(json['data'][0]['attributes']['name']).to eql('Cisco')
+    expect(json['data'][1]['attributes']['name']).to eql('Rodney')
 
     get '/api/v1/merchants/most_revenue?quantity=3'
 
@@ -87,9 +87,9 @@ RSpec.describe 'Merchant Business API', type: :request do
 
     json = JSON.parse(response.body)
 
-    expect(json['data'].length).to eql(2)
-    expect(json['data'][0]['attributes']['name']).to eql('Rodney')
-    expect(json['data'][1]['attributes']['name']).to eql('Kalhune')
-    expect(json['data'][1]['attributes']['name']).to eql('Mac')
+    expect(json['data'].length).to eql(3)
+    expect(json['data'][0]['attributes']['name']).to eql('Cisco')
+    expect(json['data'][1]['attributes']['name']).to eql('Rodney')
+    expect(json['data'][2]['attributes']['name']).to eql('Kalhune')
   end
 end
