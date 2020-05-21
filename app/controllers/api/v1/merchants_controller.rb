@@ -31,6 +31,6 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def serialize_merchant(records)
-    MerchantSerializer.new(records).serialized_json
+    MerchantSerializer.new(records)
   end
 end

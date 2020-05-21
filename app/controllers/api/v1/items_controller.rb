@@ -32,7 +32,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def serialize_item(records)
-    ItemSerializer.new(records).serialized_json
+    ItemSerializer.new(records)
   end
 
 end
